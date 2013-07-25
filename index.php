@@ -6,7 +6,7 @@
 	require( 'config.php' );
 
 	//get markdown lib
-	require( 'lib/markdown.php' );
+	require( 'lib/Markdown.php' );
 	//get template lib
 	require( 'lib/template.php' );
 
