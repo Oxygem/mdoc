@@ -31,9 +31,19 @@
 	//get file
 	$data = file_get_contents( $file );
 
+	//our index location (for internal links/home link)
+	$index = str_replace( 'index.php', '', $_SERVER['SCRIPT_NAME'] );
+	$tmpl->setData( 'home', $index );
 	//hacky, but works: internal page links
 	//	replace ](/ (bit in md where link name and url come together) with our location
-	$data = preg_replace( '/]\(\//', '](' . str_replace( 'index.php', '', $_SERVER['SCRIPT_NAME'] ), $data );
+	$data = preg_replace( '/]\(\//', '](' . $index, $data );
+
+	//similarly hack to above: take top #<key>=<value> for title, description, tags
+	preg_match_all( '/#([aA-zZ0-9]+)=([aA-zZ0-9, ]+)/i', $data, $matches, PREG_SET_ORDER );
+	foreach( $matches as $k => $match ):
+		$tmpl->setData( $match[1], $match[2] );
+		$data = str_replace( $match[0], '', $data );
+	endforeach;
 
 	//show template w/ markdown
 	return $tmpl->showPage( $md->defaultTransform( $data ) );
