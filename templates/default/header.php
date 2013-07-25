@@ -16,7 +16,7 @@
 	<link rel="canonical" href="<?php echo $this->getData( 'home' ); ?><?php echo $this->getData( 'request' ); ?>" />
 
 	<!--style-->
-	<link rel="stylesheet" href="<?php echo $this->getData( 'home' ); ?>src/inc/default/style.css"
+	<link rel="stylesheet" href="<?php echo $this->getData( 'home' ); ?>src/inc/default/style.css" />
 
 	<!--script-->
 	<script type="text/javascript">
