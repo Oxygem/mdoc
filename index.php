@@ -1,4 +1,6 @@
 <?php
+	//start time
+	$start = microtime( true );
 
 	//get config
 	require( 'config.php' );
@@ -8,10 +10,18 @@
 	//get template lib
 	require( 'lib/template.php' );
 
+
+
 	//init template
-	$tmpl = new template( $config['template'] );
+	$tmpl = new template( $config['template'], $start );
+	//our index location (for internal links/home link)
+	$index = str_replace( 'index.php', '', $_SERVER['SCRIPT_NAME'] );
+	$tmpl->setData( 'home', $index );
+
 	//init markdown
 	$md = new Michelf\Markdown();
+
+
 
 	//request set?
 	if( !isset( $_GET['request'] ) )
@@ -24,16 +34,27 @@
 		$_GET['request'] = $config['home'];
 
 	//does this file exist?
-	$file = __DIR__ . '/src/' . $_GET['request'] . '.md';
+	$file = './src/doc/' . $_GET['request'] . '.md';
 	if( !file_exists( $file ) )
 		return $tmpl->showError( 'File not found' );
+
+	//set request
+	$tmpl->setData( 'request', $_GET['request'] );
+
+	//work out folder
+	$bits = explode( '/', $file );
+	$tmpl->setData( 'filename', str_replace( '.md', '', array_pop( $bits ) ) ); //remove file
+	$folder = implode( '/', $bits );
+	//get folders + files in current directory, build nav
+	$files = glob( $folder . '/*.md' );
+	foreach( $files as $key => $f ):
+		$files[$key] = str_replace( array( $folder . '/', '.md' ), '', $f );
+	endforeach;
+	$tmpl->setData( 'nav', $files );
 
 	//get file
 	$data = file_get_contents( $file );
 
-	//our index location (for internal links/home link)
-	$index = str_replace( 'index.php', '', $_SERVER['SCRIPT_NAME'] );
-	$tmpl->setData( 'home', $index );
 	//hacky, but works: internal page links
 	//	replace ](/ (bit in md where link name and url come together) with our location
 	$data = preg_replace( '/]\(\//', '](' . $index, $data );
@@ -45,6 +66,9 @@
 		$data = str_replace( $match[0], '', $data );
 	endforeach;
 
-	//show template w/ markdown
-	return $tmpl->showPage( $md->defaultTransform( $data ) );
+	//make markdown
+	$data = $md->defaultTransform( $data );
+
+	//show template
+	return $tmpl->showPage( $data );
 ?>
