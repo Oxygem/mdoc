@@ -31,6 +31,10 @@
 	//get file
 	$data = file_get_contents( $file );
 
+	//hacky, but works: internal page links
+	//	replace ](/ (bit in md where link name and url come together) with our location
+	$data = preg_replace( '/]\(\//', '](' . str_replace( 'index.php', '', $_SERVER['SCRIPT_NAME'] ), $data );
+
 	//show template w/ markdown
 	return $tmpl->showPage( $md->defaultTransform( $data ) );
 ?>
