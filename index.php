@@ -77,6 +77,23 @@
 		$data = str_replace( $match[0], '', $data );
 	endforeach;
 
+	//another hack (inline lazy-indexes)
+	if( preg_match( '/#=index/i', $data ) ):
+		//use file & foldernav to inject cheeky markdown
+		$string = '';
+		$bit = str_replace( 'index', '', $_GET['request'] );
+		if( count( $files ) > 1 ) $string .= '+ **Files**' . PHP_EOL;
+		foreach( $files as $file ):
+			if( $file == 'index' ) continue;
+			$string .= '  + [' . ucfirst( $file ) . '](' . $index . $bit . $file . ')' . PHP_EOL;
+		endforeach;
+		if( count( $folders ) > 0 ) $string .= '+ **Folders**' . PHP_EOL;
+		foreach( $folders as $folder ):
+			$string .= '  + [' . ucfirst( $folder ) . '](' . $index . $bit . $folder . '/index)' . PHP_EOL;
+		endforeach;
+		$data = str_replace( '#=index', $string, $data );
+	endif;
+
 	//make markdown
 	$data = $md->defaultTransform( $data );
 
