@@ -43,15 +43,26 @@
 
 	//work out folder
 	$bits = explode( '/', $file );
-	$tmpl->setData( 'filename', str_replace( '.md', '', array_pop( $bits ) ) ); //remove file
+	$filename = str_replace( '.md', '', array_pop( $bits ) );
+	$tmpl->setData( 'filename', $filename ); //remove file
+	$tmpl->setData( 'title', ucfirst( $filename ) );
 	$folder = implode( '/', $bits );
-	//get folders + files in current directory, build nav
+	//get files in current directory, build nav
 	$files = glob( $folder . '/*.md' );
 	foreach( $files as $key => $f ):
 		$files[$key] = str_replace( array( $folder . '/', '.md' ), '', $f );
 	endforeach;
-	$tmpl->setData( 'nav', $files );
-
+	$tmpl->setData( 'filenav', $files );
+	//get folders
+	$folders = glob( $folder . '/*', GLOB_ONLYDIR );
+	foreach( $folders as $key => $f ):
+		$folders[$key] = str_replace( $folder . '/', '', $f );
+	endforeach;
+	$tmpl->setData( 'foldernav', $folders );
+	//if request has a slash, up folder link
+	if( preg_match( '/\//', $_GET['request'] ) )
+		$tmpl->setData( 'subfolder', true );
+	
 	//get file
 	$data = file_get_contents( $file );
 
