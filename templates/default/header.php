@@ -31,7 +31,12 @@
 
 		<ul id="pagenav">
 			<li>Pages in this directory:</li>
-			<?php if( $this->getData( 'nav' ) ): foreach( $this->getData( 'nav' ) as $key => $nav ): ?>
+			<?php if( $this->getData( 'filenav' ) ): foreach( $this->getData( 'filenav' ) as $key => $nav ): ?>
 				<li><a href="<?php echo $nav; ?>"><?php echo $nav; echo $this->getData( 'filename' ) == $nav ? ' (active)' : ''; ?></a></li>
+			<?php endforeach; endif; ?>
+
+			<li>Folders in this directory:</li>
+			<?php if( $this->getData( 'foldernav' ) ): foreach( $this->getData( 'foldernav' ) as $key => $nav ): ?>
+				<li><a href="<?php echo $nav; ?>/index"><?php echo $nav; ?></a></li>
 			<?php endforeach; endif; ?>
 		</ul>
