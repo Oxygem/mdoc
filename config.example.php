@@ -3,6 +3,7 @@
 	$config = array(
 		'template' => 'default',
 		'home' => 'home',
-		'title' => 'mdoc'
+		'title' => 'mdoc',
+        'ignore' => array( 'filename', 'anotherfile' )
 	);
 ?>
