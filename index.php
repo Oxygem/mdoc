@@ -80,14 +80,14 @@
 	$data = preg_replace( '/]\(\//', '](' . $index, $data );
 
 	//similarly hack to above: take top #<key>=<value> for title, description, tags
-	preg_match_all( '/#([aA-zZ0-9]+)=([aA-zZ0-9, ]+)/i', $data, $matches, PREG_SET_ORDER );
+	preg_match_all( '/\$([aA-zZ0-9]+)=([aA-zZ0-9, ]+)/i', $data, $matches, PREG_SET_ORDER );
 	foreach( $matches as $k => $match ):
 		$tmpl->setData( $match[1], $match[2] );
 		$data = str_replace( $match[0], '', $data );
 	endforeach;
 
 	//another hack (inline lazy-indexes)
-	if( preg_match( '/#=index/i', $data ) ):
+	if( preg_match( '/\$=index/i', $data ) ):
 		//use file & foldernav to inject cheeky markdown
 		$string = '';
 		$bit = str_replace( 'index', '', $_GET['request'] );
@@ -100,11 +100,11 @@
 		foreach( $folders as $folder ):
 			$string .= '  + [' . ucfirst( $folder ) . '](' . $index . $bit . $folder . '/index)' . PHP_EOL;
 		endforeach;
-		$data = str_replace( '#=index', $string, $data );
+		$data = str_replace( '$=index', $string, $data );
 	endif;
 
 	//another hack! (#=home become $index)
-	$data = str_replace( '#=home', $index, $data );
+	$data = str_replace( '$=home', $index, $data );
 
 	//make markdown
 	$data = $md->defaultTransform( $data );
