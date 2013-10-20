@@ -91,7 +91,7 @@
 		//use file & foldernav to inject cheeky markdown
 		$string = '';
 		$bit = str_replace( 'index', '', $_GET['request'] );
-		if( count( $files ) > 1 ) $string .= '+ **Files**' . PHP_EOL;
+		if( count( $files ) > 1 ) $string .= '+ **Documents**' . PHP_EOL;
 		foreach( $files as $file ):
 			if( $file == 'index' ) continue;
 			$string .= '  + [' . ucfirst( $file ) . '](' . $index . $bit . $file . ')' . PHP_EOL;
