@@ -80,7 +80,7 @@
 	$data = preg_replace( '/]\(\//', '](' . $index, $data );
 
 	//similarly hack to above: take top #<key>=<value> for title, description, tags
-	preg_match_all( '/\$([aA-zZ0-9]+)=([aA-zZ0-9, ]+)/i', $data, $matches, PREG_SET_ORDER );
+	preg_match_all( '/\$([aA-zZ0-9]+)=([^\n]+)/i', $data, $matches, PREG_SET_ORDER );
 	foreach( $matches as $k => $match ):
 		$tmpl->setData( $match[1], $match[2] );
 		$data = str_replace( $match[0], '', $data );
@@ -90,10 +90,10 @@
 	if( preg_match( '/\$=index/i', $data ) ):
 		//use file & foldernav to inject cheeky markdown
 		$string = '';
-		$bit = str_replace( 'index', '', $_GET['request'] );
+		$bit = str_replace( $filename, '', $_GET['request'] );
 		if( count( $files ) > 1 ) $string .= '+ **Documents**' . PHP_EOL;
 		foreach( $files as $file ):
-			if( $file == 'index' ) continue;
+			if( $file == $filename ) continue;
 			$string .= '  + [' . ucfirst( $file ) . '](' . $index . $bit . $file . ')' . PHP_EOL;
 		endforeach;
 		if( count( $folders ) > 0 ) $string .= '+ **Folders**' . PHP_EOL;
