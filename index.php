@@ -103,7 +103,7 @@
 		$data = str_replace( '$=index', $string, $data );
 	endif;
 
-	//another hack! (#=home become $index)
+	//another hack! ($=home become $index)
 	$data = str_replace( '$=home', $index, $data );
 
 	//make markdown
