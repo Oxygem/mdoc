@@ -1,6 +1,6 @@
-#title=Home Page
-#keywords=home, test, whatever
-#description=this page discusses some shit
+$title=Home Page
+$keywords=home, test, whatever
+$description=this page discusses some shit
 
 Welcome to the homepage.
 
